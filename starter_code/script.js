@@ -13,11 +13,15 @@ window.onload = function() {
   var obstYPosition = 50;
 
 
-  var img = new Image();
-  img.src = "images/car.png";
-  img.onload = function(){
-    ctx.drawImage(img,carXPosition-40,640,80,160);
+
+  var imgCar = new Image();
+  imgCar.src = "images/car.png";
+  imgCar.onload = function(){
+    ctx.drawImage(imgCar,carXPosition-40,640,80,160);
   }
+
+  var imgPow = new Image()
+  imgPow.src = "images/POW.png";
 
   ctx.fillRect(50, obstYPosition, 160,60);
 
@@ -27,10 +31,12 @@ window.onload = function() {
         case 37: carXPosition-=3;
         case 39: carXPosition+=3;
       }
-      window.requestAnimationFrame(updateCanvas);
     }
+    window.requestAnimationFrame(updateCanvas);
   }
 
+
+  
   //use this function inside updateCanvas() to check if car and obstacle crash
   function intersect(rect1, rect2) {
     rect1left = rect1.x
@@ -50,10 +56,21 @@ window.onload = function() {
   }
 
   function updateCanvas() {
+    if(
+      intersect(
+        {x: 0, y: obstYPosition, width: 160, height: 60},
+        {x: carXPosition, y: 300, width: 80, height: 160}
+      )
+    ) {
+      alert("POW! You crashed");
+      imgPow.onload = function() {
+        ctx.drawImage(imgPow, powPosition, 250, 400, 50, 50);
+    }
+  }
     obstYPosition +=2;
     ctx.clearRect(0,0,500,800);
     ctx.fillRect(50, obstYPosition, 160,60);
-    ctx.drawImage(img,carXPosition-40,640,80,160);
+    ctx.drawImage(imgCar,carXPosition-40,640,80,160);
     window.requestAnimationFrame(updateCanvas);
     }
-};
+}
